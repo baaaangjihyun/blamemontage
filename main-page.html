@@ -1,0 +1,163 @@
+<!-- main-page.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #gif-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        #video-background {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #white-rectangle {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 700px;
+           
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px 40px;
+        }
+
+        #typed-text {
+            font-size: 20px;
+            white-space: pre-line;
+            overflow: hidden;
+            /* border-right: 2px solid black; */
+            margin-top: 20px;
+            line-height: 160%;
+            color: white;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        #blink::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            /* top: 0;
+            right: -10px; */
+            width: 3px;
+            height: 30px;
+            margin-left: 3px;
+            background-color: black;
+        }
+
+        #blink.active::after {
+            display: none;
+            /*active 클래스가 있으면 보이지 않음*/
+        }
+
+        #centered-image {
+            display: none;
+            /* 초기에는 숨김 */
+            margin-left: 800px;
+            margin-top: auto;
+            cursor: pointer;
+        }
+        h1 { color:white; text-decoration-line: underline;}
+    </style>
+</head>
+
+<body>
+    <div id="gif-container">
+        <video id="video-background" autoplay muted loop>
+            <source src="back.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div id="white-rectangle">
+        <div>
+            <span id="typed-text">
+                안녕하세요. <span id="name-placeholder">@@</span>님. <br>
+                최근 화나는 일이 있었나요? 혹은 속상한 일은요?<br>
+                우리는 가끔 이유없이 화나거나 인정하고 싶지 않은 감정을 느끼는 상황을 겪습니다.<br>
+                이럴 땐, 이 모든 원흉을 탓 할 누군가를 필요로 할지도 모르지요. <br>
+                그렇다면 당신의 건강한 마인드 라이프를 위해, 우리끼리의 빌런을 한 명 만들어보는건 어떨까요? <br>
+                가상의 몽타주를 완성하여 무엇이든 탓 해 보세요!
+            </span><span id="blink"></span>
+        </div>
+
+        <h1 id="centered-image" src="next.png" alt="Centered Image" onclick="navigateToNextPage()"> Okay. <br> I'm <br> Ready </h1>
+
+        <img id="centered-image" src="next.png" alt="Centered Image" onclick="navigateToNextPage()">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const namePlaceholder = document.getElementById('name-placeholder');
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name');
+            if (name) {
+                namePlaceholder.innerHTML = name;
+            }
+            const textElement = document.getElementById('typed-text');
+            const blinkP = document.getElementById('blink');
+            const centeredImage = document.getElementById('centered-image');
+            const gifContainer = document.getElementById('gif-container');
+            const textContent = textElement.textContent.trim();
+            const resplit = textElement.textContent.split(" ");
+            textElement.textContent = '';
+            index = 0;
+            function typeWriterEffect(index) {
+                textElement.textContent += textContent[index];
+                index++;
+
+                if (index < textContent.length) {
+                    setTimeout(function () {
+                        typeWriterEffect(index);
+                    }, 50);
+                } else {
+                    setTimeout(function () {
+                        centeredImage.style.display = 'block';
+                    }, 500);
+                    // 이미지가 나타나는 시점 조절
+                }
+            }
+            function blink() {
+                blinkP.classList.toggle("active"); // dynamic에 active 클래스 추가<->삭제 반복
+            }
+            setInterval(blink, 500)
+            setTimeout(function () {
+                typeWriterEffect(0);
+            }, 80);
+
+
+        });
+
+        function navigateToNextPage() {
+            window.location.href = "next-page.html"
+        }
+    </script>
+
+</body>
+
+</html>
